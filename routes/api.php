@@ -25,21 +25,10 @@ use App\Http\Controllers\{
 |
 */
 
-/*
-Route::group(['prefix' => 'contrato'], function () {
-    Route::post('/store', [ContractController::class, 'store']);
-    Route::put('/update/{id}', [ContractController::class, 'update']);
-    Route::post('/termination-term', [ContractController::class, 'createTerminationTerm']);
-    Route::get('/get/{id}', [ContractController::class, 'getContract']);
-    Route::get('/download/{id}', [ContractController::class, 'download']);
-});
-*/
-
 Route::post('me', [AuthController::class, 'me']);
 Route::post('login', [AuthController::class, 'login'])->name('login');
 Route::post('logout', [AuthController::class, 'logout']);
 Route::post('refresh', [AuthController::class, 'refresh']);
-
 
 Route::controller(ContratoColaboradorController::class)->group(function () {
     Route::get('contrato-colaborador', 'index');
@@ -51,16 +40,29 @@ Route::controller(ContratoColaboradorController::class)->group(function () {
     Route::get('colaborador/contrato/{id}', 'getContrato');
 });
 
-Route::controller(ContratoBeneficiarioController::class)->group(function () {
-    Route::get('contrato-beneficiario', 'index');
-    Route::post('contrato-beneficiario/store', 'store');
-    Route::get('beneficiario', 'index');
-    Route::post('beneficiario/store', 'store');
-    Route::get('beneficiario/{id}', 'getBeneficiario');
-    Route::get('beneficiario/dependentes/{id}', 'getDependentes');
-    Route::get('beneficiario/contrato/{id}', 'getContrato');
+Route::controller(ContratoBeneficiarioController::class)->prefix('beneficiario')->group(function () {
+    Route::get('', 'index');
+    Route::post('/contrato/store', 'store');
+    Route::post('/store', 'store');
+    Route::get('/{id}', 'getBeneficiario');
+    Route::get('/dependentes/{id}', 'getDependentes');
+    Route::get('/contrato/{id}', 'getContrato');
+    Route::get('/historico/{id}', 'getHistoricoBeneficiario');
+    Route::get('/contrato/download/{id}', 'download');
 });
 
+Route::controller(PagamentoBeneficiarioController::class)->group(function () {
+    Route::get('pagamento', 'searchBeneficiarioPagamento');
+});
+
+Route::controller(PlansController::class)->prefix('plans')->group(function () {
+    Route::get('', 'index');
+    Route::post('/store', 'store');
+    Route::put('/update/{id}', 'update');
+    Route::get('/get-all', 'getAllPlans');
+    Route::get('/get-plan/{id}', 'getPlan');
+    Route::get('/get-additional-benefits/{id}', 'getAdditionalBenefits');
+});
 
 // Route::controller(ColaboradorController::class)->group(function () {
 //     Route::get('colaborador', 'index');
@@ -79,10 +81,6 @@ Route::controller(ContratoBeneficiarioController::class)->group(function () {
 //     Route::get('get-historico-beneficiario/{id}', 'getHistoricoBeneficiario');
 // });
 
-Route::controller(PagamentoBeneficiarioController::class)->group(function () {
-    Route::get('pagamento', 'searchBeneficiarioPagamento');
-});
-
 // Route::controller(ContractController::class)->group(function () {
 //     Route::post('contract/store', 'store');
 //     Route::put('contract/update/{id}', 'update');
@@ -90,12 +88,3 @@ Route::controller(PagamentoBeneficiarioController::class)->group(function () {
 //     Route::get('get-contract/{id}', 'getContract');
 //     Route::get('contract/download/{id}', 'download');
 // });
-
-Route::controller(PlansController::class)->group(function () {
-    Route::get('plans', 'index');
-    Route::post('plans/store', 'store');
-    Route::put('plans/update/{id}', 'update');
-    Route::get('plans/get-all', 'getAllPlans');
-    Route::get('plans/get-plan/{id}', 'getPlan');
-    Route::get('plans/get-additional-benefits/{id}', 'getAdditionalBenefits');
-});

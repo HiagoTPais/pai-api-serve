@@ -13,8 +13,8 @@ class BeneficiariesController extends Controller
     public function index(Request $request)
     {
         $query = DB::table("beneficiarios as b")
-            ->leftJoin('contratos as c', 'b.id', '=', 'c.beneficiario_id')
-            ->leftJoin('planos as p', 'c.selecione_plano', '=', 'p.id');
+            ->leftJoin('contrato_beneficiario as cb', 'b.id', '=', 'cb.beneficiario_id')
+            ->leftJoin('planos as p', 'cb.selecione_plano', '=', 'p.id');
 
         if ($request->input('search')) {
             $search = $request->search;

@@ -11,14 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('contrato_documento', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+        Schema::create('beneficiario_documento', function (Blueprint $table) {
+            $table->id();
             $table->uuid('contrato_id')->nullable(false);
-            $table->string('file_name');
+            $table->string('arquivo');
             $table->timestamps();
         });
 
-        Schema::table('contrato_documento', function (Blueprint $table) {
+        Schema::table('beneficiario_documento', function (Blueprint $table) {
             $table->foreign('contrato_id')->references('id')->on('contrato_beneficiario')->onDelete('cascade');
         });
     }
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::dropIfExists('table_beneficiario_documento');
     }
 };

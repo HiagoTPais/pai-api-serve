@@ -5,8 +5,15 @@ namespace App\Http\Controllers;
 use App\Http\Resources\ContractResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use App\Models\{Contract, DependentBeneficiaries, Beneficiaries, ContractDocument, TerminationTerm};
-use Illuminate\Support\Facades\DB;
+use App\Models\{
+    ContratosBeneficiarios,
+    DependentBeneficiaries,
+    Beneficiaries,
+    BeneficiarioDocumento,
+    TerminationTerm,
+    HistoricoBeneficiario
+};
+use Illuminate\Support\Facades\{DB, Log};
 use App\Http\Services\{ProtocoloServices, ContratoServices};
 use Carbon\Carbon;
 
@@ -18,23 +25,57 @@ class ContratoBeneficiarioController extends Controller
     ) {
     }
 
+    public function index(Request $request)
+    {
+        $query = DB::table("beneficiarios as b")
+            ->leftJoin('contrato_beneficiario as cb', 'b.id', '=', 'cb.beneficiario_id')
+            ->leftJoin('planos as p', 'cb.selecione_plano', '=', 'p.id');
+
+        if ($request->input('search')) {
+            $search = $request->search;
+
+            $query->where('b.nome_completo', 'like', '%' . $search . '%')
+                ->OrWhere('b.cpf', 'like', '%' . $search . '%');
+        }
+
+        $query->select(
+            'b.id',
+            'b.protocolo_id',
+            'b.nome_completo',
+            'b.cpf',
+            'b.status',
+            'p.nome',
+            'p.duracao_contrato',
+            'p.taxa_rescisao',
+        );
+
+        $beneficiarios = $query->paginate(10);
+
+        return $beneficiarios;
+    }
+
     public function store(Request $request)
     {
+        Log::info('$request->all()');
+        Log::info($request->all());
+
         $data_form = $request->all()["dataForm"];
 
         $beneficiario_contratante = $data_form[0];
 
         $beneficiario_contratante['protocolo_id'] = $this->protocoloServices->createProtocoloId();
 
-        $beneficiario_contratante['data_nascimento'] = date('Y-m-d', strtotime($beneficiario_contratante['data_nascimento']));
-
-        $beneficiario_contratante['data_expedicao'] = date('Y-m-d', strtotime($beneficiario_contratante['data_expedicao']));
-
         $beneficiaries = Beneficiaries::create($beneficiario_contratante);
+
+        Log::info('$beneficiaries');
+        Log::info($beneficiaries->id);
 
         $data = $this->formatData($data_form, $beneficiaries);
 
-        $contract = Contract::create($data);
+        Log::info('$data');
+        Log::info($data);
+
+        $contract = ContratosBeneficiarios::create($data);
 
         $beneficiarios_dependentes = $data_form[2];
 
@@ -66,7 +107,7 @@ class ContratoBeneficiarioController extends Controller
 
         // Log::info($beneficiaries);
 
-        // $contract = Contract::find($id);
+        // $contract = ContratosBeneficiarios::find($id);
 
         response()->json(['success' => 'success'], 200);
     }
@@ -108,17 +149,20 @@ class ContratoBeneficiarioController extends Controller
 
     public function download($id)
     {
-        $file = DB::table('contract_document')->where('contrato_id', $id)->get();
+        $file = DB::table('beneficiario_documento')->where('contrato_id', $id)->get();
 
-        return response()->download(public_path('/pdf/' . $file[0]->file_name));
+        Log::info('download($id)');
+        Log::info($file);
+
+        return response()->download(public_path('/pdf/' . $file[0]->arquivo));
     }
 
-    public function getContract($id)
+    public function getContrato($id)
     {
         // $contract = DB::table("contract as c")->where('c.id', $id)->get();
         // $additional_benefits =  DB::table("additional_benefits as ab")->where('ab.contrato_id', $contract[0]->id)->get();
 
-        $contract = Contract::where("beneficiario_id", $id)->get();
+        $contract = ContratosBeneficiarios::where("beneficiario_id", $id)->get();
 
         return ContractResource::collection($contract);
     }
@@ -140,16 +184,36 @@ class ContratoBeneficiarioController extends Controller
 
     public function createPDF($info, $name)
     {
-        $fileName = Str::replace(" ", "_", Carbon::now()) . '.pdf';
+        $arquivo = Str::replace(" ", "_", Carbon::now()) . '.pdf';
 
-        $pdf = \PDF::loadView('templates.' . $name, $info->getOriginal())
-            ->save(public_path('/pdf/' . $fileName));
+        $pdf = \PDF::loadView('templates.' . $name, $info->getOriginal())->save(public_path('/pdf/' . $arquivo));
 
-        ContractDocument::create([
+        BeneficiarioDocumento::create([
             'contrato_id' => $info->id,
-            'file_name' => $fileName
+            'arquivo' => $arquivo
         ]);
 
         return $pdf->download('pdf_file.pdf');
+    }
+
+    public function getHistoricoBeneficiario($id)
+    {
+        // $historicoBeneficiario = HistoricoBeneficiario::where($id)->get();
+        $historicoBeneficiario = HistoricoBeneficiario::all();
+
+        return $historicoBeneficiario;
+    }
+
+    public function getBeneficiario($id) {
+        $beneficiario = Beneficiaries::where("id", $id)->get();
+
+        return $beneficiario;
+    }
+
+    public function getDependentes($id)
+    {
+        $dependentes = DependentBeneficiaries::where("beneficiario_id", $id)->get();
+
+        return $dependentes;
     }
 }

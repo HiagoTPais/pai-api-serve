@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('cpf')->nullable();
             $table->string('estado_civil')->nullable();
             $table->string('grau_escolaridade')->nullable();
-            $table->string('ocupaçao')->nullable();
+            $table->string('ocupacao')->nullable();
             $table->string('religiao')->nullable();
             $table->string('apelido')->nullable();
             $table->string('rua')->nullable();
@@ -34,7 +34,7 @@ return new class extends Migration
             $table->string('cidade')->nullable();
             $table->string('uf')->nullable();
             $table->string('complemento')->nullable();
-            $table->string('ponto_referência')->nullable();
+            $table->string('ponto_referencia')->nullable();
             $table->string('zona')->nullable();
             $table->string('whatsapp_1_num')->nullable();
             $table->string('whatsapp_1')->nullable();

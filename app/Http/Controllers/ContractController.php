@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\ContractResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use App\Models\{Contract, DependentBeneficiaries, Beneficiaries, ContractDocument, TerminationTerm};
+use App\Models\{ContratosBeneficiarios, DependentBeneficiaries, Beneficiaries, ContractDocument, TerminationTerm};
 use App\Http\Services\{ProtocoloServices, ContratoServices};
 use Illuminate\Support\Facades\{DB, Log};
 use Carbon\Carbon;
@@ -34,7 +34,7 @@ class ContractController extends Controller
 
         $data = $this->formatData($data_form, $beneficiaries);
 
-        $contract = Contract::create($data);
+        $contract = ContratosBeneficiarios::create($data);
 
         $beneficiarios_dependentes = $data_form[2];
 
@@ -66,7 +66,7 @@ class ContractController extends Controller
 
         // Log::info($beneficiaries);
 
-        // $contract = Contract::find($id);
+        // $contract = ContratosBeneficiarios::find($id);
 
         response()->json(['success' => 'success'], 200);
     }
@@ -108,7 +108,7 @@ class ContractController extends Controller
 
     public function download($id)
     {
-        $file = DB::table('contract_document')->where('contrato_id', $id)->get();
+        $file = DB::table('beneficiario_documento')->where('contrato_id', $id)->get();
 
         Log::info(json_encode($file));
 
@@ -120,7 +120,7 @@ class ContractController extends Controller
         // $contract = DB::table("contract as c")->where('c.id', $id)->get();
         // $additional_benefits =  DB::table("additional_benefits as ab")->where('ab.contrato_id', $contract[0]->id)->get();
 
-        $contract = Contract::where("beneficiario_id", $id)->get();
+        $contract = ContratosBeneficiarios::where("beneficiario_id", $id)->get();
 
         return ContractResource::collection($contract);
     }

@@ -31,7 +31,7 @@ return new class extends Migration
         });
 
         Schema::table('beneficiarios_dependentes', function (Blueprint $table) {
-            $table->foreign('contrato_id')->references('id')->on('contratos')->onDelete('cascade');
+            $table->foreign('contrato_id')->references('id')->on('contrato_beneficiario')->onDelete('cascade');
         });
     }
 

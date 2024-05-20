@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Traits\HasUuid;
 
-class Contract extends Model
+class ContratosBeneficiarios extends Model
 {
     use HasFactory, HasUuid;
 
@@ -14,7 +14,7 @@ class Contract extends Model
 
     public $incrementing = false;
 
-    protected $table = "contratos";
+    protected $table = "contrato_beneficiario";
 
     protected $fillable = [
         'nome_completo',
@@ -26,7 +26,7 @@ class Contract extends Model
         'cpf',
         'estado_civil',
         'grau_escolaridade',
-        'ocupaçao',
+        'ocupacao',
         'religiao',
         'apelido',
         'rua',
@@ -36,7 +36,7 @@ class Contract extends Model
         'cidade',
         'uf',
         'complemento',
-        'ponto_referência',
+        'ponto_referencia',
         'zona',
         'whatsapp_1_num',
         'whatsapp_1',
@@ -81,7 +81,7 @@ class Contract extends Model
         'complemento_cobranca',
         'zona_cobranca',
         'ponto_referencia',
-        'beneficiarios_id',
+        'beneficiario_id',
     ];
 
     // public function additionalBenefits(): HasMany

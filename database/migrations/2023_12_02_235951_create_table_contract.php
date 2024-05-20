@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('contratos', function (Blueprint $table) {
+        Schema::create('contrato_beneficiario', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('beneficiario_id')->nullable(false);
             $table->string('selecione_plano')->nullable();
@@ -48,7 +48,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::table('contratos', function (Blueprint $table) {
+        Schema::table('contrato_beneficiario', function (Blueprint $table) {
             $table->foreign('beneficiario_id')->references('id')->on('beneficiarios')->onDelete('cascade');
         });
     }
@@ -58,6 +58,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('contratos');
+        Schema::dropIfExists('contrato_beneficiario');
     }
 };
