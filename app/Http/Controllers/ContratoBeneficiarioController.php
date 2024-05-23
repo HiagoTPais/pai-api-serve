@@ -56,9 +56,6 @@ class ContratoBeneficiarioController extends Controller
 
     public function store(Request $request)
     {
-        Log::info('$request->all()');
-        Log::info($request->all());
-
         $data_form = $request->all()["dataForm"];
 
         $beneficiario_contratante = $data_form[0];
@@ -67,13 +64,13 @@ class ContratoBeneficiarioController extends Controller
 
         $beneficiaries = Beneficiaries::create($beneficiario_contratante);
 
-        Log::info('$beneficiaries');
-        Log::info($beneficiaries->id);
+        // Log::info('$beneficiaries');
+        // Log::info($beneficiaries->id);
 
         $data = $this->formatData($data_form, $beneficiaries);
 
-        Log::info('$data');
-        Log::info($data);
+        // Log::info('$data');
+        // Log::info($data);
 
         $contract = ContratosBeneficiarios::create($data);
 
@@ -114,7 +111,13 @@ class ContratoBeneficiarioController extends Controller
 
     protected function storeBeneficiariosDependentes($dep, $contract, $beneficiaries)
     {
-        $dependent_format = $this->contratoServices->formatAdditional($dep);
+        Log::info("beneficiarios_dependentes");
+        Log::info($dep);
+
+        $dependent_format = $this->contratoServices->formatDependentes($dep);
+
+        Log::info("dependent_format");
+        Log::info($dependent_format);
 
         foreach ($dependent_format as $key => $value) {
             $value += [
@@ -150,9 +153,6 @@ class ContratoBeneficiarioController extends Controller
     public function download($id)
     {
         $file = DB::table('beneficiario_documento')->where('contrato_id', $id)->get();
-
-        Log::info('download($id)');
-        Log::info($file);
 
         return response()->download(public_path('/pdf/' . $file[0]->arquivo));
     }

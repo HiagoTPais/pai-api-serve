@@ -20,12 +20,13 @@ class DependentBeneficiaries extends Model
         'beneficiario_id',
         'contrato_id',
         'nome_completo_dependente',
+        'sexo_dependente',
         'nascimento_dependente',
         'parentesco_dependente',
         'cpf_dependente',
         'whatsapp_dependente',
         'seguro_dependente',
         'extra',
-        'telefone_dependente',
+        'telefone_dependente'
     ];
 }

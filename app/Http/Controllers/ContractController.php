@@ -14,7 +14,7 @@ class ContractController extends Controller
 {
     public function __construct(
         private ProtocoloServices $protocoloServices,
-        private ContratoServices $fontratoServices
+        private ContratoServices $contratoServices
     ) {
     }
 
@@ -73,7 +73,7 @@ class ContractController extends Controller
 
     protected function storeBeneficiariosDependentes($dep, $contract, $beneficiaries)
     {
-        $dependent_format = $this->fontratoServices->formatAdditional($dep);
+        $dependent_format = $this->contratoServices->formatDependentes($dep);
 
         foreach ($dependent_format as $key => $value) {
             $value += [

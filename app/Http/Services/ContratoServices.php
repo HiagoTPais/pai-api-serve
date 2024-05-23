@@ -9,9 +9,6 @@ class ContratoServices
 {
     public function formatAdditional($item)
     {
-        // Log::info('formatAdditional');
-        // Log::info($item);
-
         $keys = array_keys($item);
         $format = array();
 
@@ -80,6 +77,33 @@ class ContratoServices
                 unset($format[$key]);
             }
         }
+
+        return $format;
+    }
+
+    public function formatDependentes($item)
+    {
+        $key = 0;
+        $format = [];
+        for ($i = 0; $i < count($item) / 9; $i++) {
+            $filter = [
+                "nome_completo_dependente" => $item['nome_completo_dependente_' . $key],
+                "sexo_dependente" => $item['sexo_dependente_' . $key],
+                "nascimento_dependente" => $item['nascimento_dependente_' . $key],
+                "parentesco_dependente" => $item['parentesco_dependente_' . $key],
+                "cpf_dependente" => $item['cpf_dependente_' . $key],
+                "telefone_dependente" => $item['telefone_dependente_' . $key],
+                "whatsapp_dependente" => $item['whatsapp_dependente_' . $key],
+                "seguro_dependente" => $item['seguro_dependente_' . $key],
+                "extra" => $item['extra_' . $key]
+            ];
+
+            $key++;
+
+            array_push($format, $filter);
+        }
+
+        Log::info($format);
 
         return $format;
     }

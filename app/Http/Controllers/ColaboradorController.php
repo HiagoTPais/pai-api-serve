@@ -106,7 +106,7 @@ class ColaboradorController extends Controller
 
     protected function storeColaboradorDependentes($dep, $colaborador)
     {
-        $format = $this->contratoServices->formatAdditional($dep);
+        $format = $this->contratoServices->formatDependentes($dep);
 
         foreach ($format as $key => $value) {
             $value += [

@@ -16,6 +16,7 @@ return new class extends Migration
             $table->uuid('beneficiario_id')->nullable(false);
             $table->uuid('contrato_id')->nullable(false);
             $table->string('nome_completo_dependente')->nullable();
+            $table->string('sexo_dependente')->nullable();
             $table->string('nascimento_dependente')->nullable();
             $table->string('parentesco_dependente')->nullable();
             $table->string('cpf_dependente')->nullable();
