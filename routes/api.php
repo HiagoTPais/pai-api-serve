@@ -55,7 +55,7 @@ Route::controller(PagamentoBeneficiarioController::class)->group(function () {
     Route::get('pagamento', 'searchBeneficiarioPagamento');
 });
 
-Route::controller(PlansController::class)->prefix('plans')->group(function () {
+Route::controller(PlansController::class)->prefix('planos')->group(function () {
     Route::get('', 'index');
     Route::post('/store', 'store');
     Route::put('/update/{id}', 'update');
