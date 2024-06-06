@@ -25,6 +25,11 @@ use App\Http\Controllers\{
 |
 */
 
+
+Route::post('rota-teste', function() {
+    dd("Rota para teste");
+});
+
 Route::post('me', [AuthController::class, 'me']);
 Route::post('login', [AuthController::class, 'login'])->name('login');
 Route::post('logout', [AuthController::class, 'logout']);
