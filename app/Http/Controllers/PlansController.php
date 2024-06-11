@@ -35,9 +35,6 @@ class PlansController extends Controller
 
         $beneficio_adicional = $request->all()['data']['beneficio_adicional'];
 
-        // Log::info($beneficio_adicional);
-        // Log::info($plan->id);
-
         $this->storeBeneficiosAdicionais($beneficio_adicional, $plan->id);
 
         if ($plan->save()) {
@@ -75,13 +72,7 @@ class PlansController extends Controller
 
     public function getAdditionalBenefits($id)
     {
-        Log::info("getAdditionalBenefits");
-
-        Log::info($id);
-
         $additionalBenefits = AdditionalBenefits::where('plano_id', $id)->get();
-
-        Log::info($additionalBenefits);
 
         return $additionalBenefits;
     }
@@ -102,13 +93,18 @@ class PlansController extends Controller
 
     protected function storeBeneficiosAdicionais($ben, $plano_id)
     {
+        Log::info("ben");
+        Log::info($ben);
+
         if ($ben) {
-            $benefits_format = $this->contratoServices->formatAdditional($ben);
+            $benefits_format = $this->contratoServices->formatPlanosBeneficios($ben);
+            Log::info("benefits_format");
+            Log::info($benefits_format);
 
             foreach ($benefits_format as $key => $value) {
                 $value += ["plano_id" => $plano_id];
 
-                if (!is_null($value['beneficio_adicional'])) {
+                if (!is_null($value['beneficio_adicional']) && isset($value['beneficio_adicional'])) {
                     AdditionalBenefits::create($value);
                 }
             }

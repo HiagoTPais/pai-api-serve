@@ -26,6 +26,6 @@ class Plans extends Model
         'n_min',
         'n_max',
         'beneficiarios',
-        'descricao',
+        'descricao'
     ];
 }

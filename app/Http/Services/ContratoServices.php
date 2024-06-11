@@ -43,7 +43,7 @@ class ContratoServices
         return $format;
     }
 
-    protected function formatPlanosBeneficios($item)
+    public function formatPlanosBeneficios($item)
     {
         $keys = array_keys($item);
         $format = array();
