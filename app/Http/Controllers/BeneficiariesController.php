@@ -57,7 +57,6 @@ class BeneficiariesController extends Controller
     {
         $beneficiary = Beneficiaries::find($id);
 
-        // Log::info($beneficiary);
         $beneficiary->delete();
 
         response()->json(['success' => 'success'], 200);

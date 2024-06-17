@@ -48,6 +48,9 @@ class ContratoColaboradorController extends Controller
     {
         $colaborador = $request->all()["dataForm"];
 
+        Log::info("colaborador");
+        Log::info($colaborador);
+
         $colaborador['data_nascimento'] = date('Y-m-d', strtotime($colaborador['data_nascimento']));
 
         $colaborador['data_expedicao'] = date('Y-m-d', strtotime($colaborador['data_expedicao']));

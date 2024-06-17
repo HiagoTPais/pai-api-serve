@@ -64,13 +64,7 @@ class ContratoBeneficiarioController extends Controller
 
         $beneficiaries = Beneficiaries::create($beneficiario_contratante);
 
-        // Log::info('$beneficiaries');
-        // Log::info($beneficiaries->id);
-
         $data = $this->formatData($data_form, $beneficiaries);
-
-        // Log::info('$data');
-        // Log::info($data);
 
         $contract = ContratosBeneficiarios::create($data);
 
@@ -81,7 +75,7 @@ class ContratoBeneficiarioController extends Controller
         $pdf = $this->createPDF($contract, 'contrato');
 
         if ($contract->save()) {
-            return new ContractResource($contract);
+            response()->json($contract);
         }
     }
 
@@ -91,22 +85,9 @@ class ContratoBeneficiarioController extends Controller
 
         $beneficiario_contratante = $data_form[0];
 
-        // Log::info($beneficiario_contratante);
-        // Log::info($id);
-
-        // $beneficios_adicionais = $data_form[1]["beneficio_adicional"];
-
-        // $beneficiarios_dependentes = $data_form[2];
-
         $beneficiaries = Beneficiaries::where('id', $id)->update($beneficiario_contratante);
 
-        // $beneficiaries->save();
-
-        // Log::info($beneficiaries);
-
-        // $contract = ContratosBeneficiarios::find($id);
-
-        response()->json(['success' => 'success'], 200);
+        response()->json($beneficiaries);
     }
 
     protected function storeBeneficiariosDependentes($dep, $contract, $beneficiaries)
@@ -186,14 +167,14 @@ class ContratoBeneficiarioController extends Controller
     {
         $arquivo = Str::replace(" ", "_", Carbon::now()) . '.pdf';
 
-        $pdf = \PDF::loadView('templates.' . $name, $info->getOriginal())->save(public_path('/pdf/' . $arquivo));
+        $pdf = \PDF::loadView('templates.' . $name, $info->getOriginal())->save('storage/pdf/' . $arquivo);
 
         BeneficiarioDocumento::create([
             'contrato_id' => $info->id,
             'arquivo' => $arquivo
         ]);
 
-        return $pdf->download('pdf_file.pdf');
+        return $pdf->download($arquivo . '.pdf');
     }
 
     public function getHistoricoBeneficiario($id)
@@ -204,7 +185,8 @@ class ContratoBeneficiarioController extends Controller
         return $historicoBeneficiario;
     }
 
-    public function getBeneficiario($id) {
+    public function getBeneficiario($id)
+    {
         $beneficiario = Beneficiaries::where("id", $id)->get();
 
         return $beneficiario;

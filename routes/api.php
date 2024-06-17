@@ -43,6 +43,7 @@ Route::controller(ContratoColaboradorController::class)->group(function () {
 Route::controller(ContratoBeneficiarioController::class)->prefix('beneficiario')->group(function () {
     Route::get('', 'index');
     Route::post('/contrato/store', 'store');
+    Route::put('/contrato/update/{id}', 'update');
     Route::post('/store', 'store');
     Route::get('/{id}', 'getBeneficiario');
     Route::get('/dependentes/{id}', 'getDependentes');

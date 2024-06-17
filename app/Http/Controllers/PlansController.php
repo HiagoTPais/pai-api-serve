@@ -93,18 +93,13 @@ class PlansController extends Controller
 
     protected function storeBeneficiosAdicionais($ben, $plano_id)
     {
-        Log::info("ben");
-        Log::info($ben);
-
         if ($ben) {
             $benefits_format = $this->contratoServices->formatPlanosBeneficios($ben);
-            Log::info("benefits_format");
-            Log::info($benefits_format);
 
             foreach ($benefits_format as $key => $value) {
                 $value += ["plano_id" => $plano_id];
 
-                if (!is_null($value['beneficio_adicional']) && isset($value['beneficio_adicional'])) {
+                if (!is_null($value['beneficio_adicional'])) {
                     AdditionalBenefits::create($value);
                 }
             }
