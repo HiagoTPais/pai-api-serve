@@ -18,11 +18,13 @@ class PlansController extends Controller
 
     public function index(Request $request)
     {
+        Log::info("UUUUUUUUUUUUUUUU");
+
         $plans = Plans::query()->when(
             $request->input('search'),
             function ($query, $search) {
-                $query->where('plan_title', 'like', '%' . $search . '%')
-                    ->OrWhere('plan_type', 'like', '%' . $search . '%');
+                $query->where('nome', 'like', '%' . $search . '%')
+                    ->OrWhere('tipo', 'like', '%' . $search . '%');
             }
         )->paginate(8);
 

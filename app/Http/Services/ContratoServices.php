@@ -86,7 +86,7 @@ class ContratoServices
         $key = 0;
         $format = [];
 
-        if ($item['nome_completo_dependente_0']) {
+        if (isset($item['nome_completo_dependente_0'])) {
             for ($i = 0; $i < count($item) / 9; $i++) {
                 $filter = [
                     "nome_completo_dependente" => $item['nome_completo_dependente_' . $key],

@@ -92,13 +92,13 @@ class ContratoBeneficiarioController extends Controller
 
     protected function storeBeneficiariosDependentes($dep, $contract, $beneficiaries)
     {
-        Log::info("beneficiarios_dependentes");
-        Log::info($dep);
+        // Log::info("beneficiarios_dependentes");
+        // Log::info($dep);
 
         $dependent_format = $this->contratoServices->formatDependentes($dep);
 
-        Log::info("dependent_format");
-        Log::info($dependent_format);
+        // Log::info("dependent_format");
+        // Log::info($dependent_format);
 
         foreach ($dependent_format as $key => $value) {
             $value += [
@@ -167,14 +167,18 @@ class ContratoBeneficiarioController extends Controller
     {
         $arquivo = Str::replace(" ", "_", Carbon::now()) . '.pdf';
 
-        $pdf = \PDF::loadView('templates.' . $name, $info->getOriginal())->save('storage/pdf/' . $arquivo);
+        $pdf = \PDF::loadView('templates.' . $name, $info->getOriginal());
+
+        // $pdf->save('public/pdf/' . $arquivo);
+
+        // dd($pdf, $arquivo);
 
         BeneficiarioDocumento::create([
             'contrato_id' => $info->id,
             'arquivo' => $arquivo
         ]);
 
-        return $pdf->download($arquivo . '.pdf');
+        return $pdf->download($arquivo);
     }
 
     public function getHistoricoBeneficiario($id)
