@@ -11,7 +11,8 @@ use App\Http\Controllers\{
     ColaboradorController,
     ContratoColaboradorController,
     PagamentoBeneficiarioController,
-    ContratoBeneficiarioController
+    ContratoBeneficiarioController,
+    ServicoFunerarioController
 };
 
 /*
@@ -64,6 +65,21 @@ Route::controller(PlansController::class)->prefix('planos')->group(function () {
     Route::get('/get-plan/{id}', 'getPlan');
     Route::get('/get-additional-benefits/{id}', 'getAdditionalBenefits');
 });
+
+Route::controller(BeneficiariesController::class)->prefix('beneficiarios')->group(function () {
+    Route::get('/search', 'search');
+});
+
+Route::controller(ServicoFunerarioController::class)->prefix('servico-funerario')->group(function () {
+    Route::post('/store', 'store');
+    Route::post('/store-novo', 'store');
+    Route::get('', 'index');
+});
+
+
+
+
+
 
 // Route::controller(ColaboradorController::class)->group(function () {
 //     Route::get('colaborador', 'index');

@@ -18,8 +18,6 @@ class PlansController extends Controller
 
     public function index(Request $request)
     {
-        Log::info("UUUUUUUUUUUUUUUU");
-
         $plans = Plans::query()->when(
             $request->input('search'),
             function ($query, $search) {

@@ -3,8 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\{Hash, Log};
+use Illuminate\Support\Facades\{DB, Hash, Log};
 use App\Models\{ContratoColaborador, Colaborador, ColaboradorDependentes, User};
 use App\Http\Services\{ProtocoloServices, ContratoServices};
 
@@ -48,8 +47,8 @@ class ContratoColaboradorController extends Controller
     {
         $colaborador = $request->all()["dataForm"];
 
-        Log::info("colaborador");
-        Log::info($colaborador);
+        // Log::info("colaborador");
+        // Log::info($colaborador);
 
         $colaborador['data_nascimento'] = date('Y-m-d', strtotime($colaborador['data_nascimento']));
 

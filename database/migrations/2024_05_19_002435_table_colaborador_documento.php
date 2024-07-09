@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('colaborador_documento', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->uuid('contrato_id')->nullable(false);
             $table->string('arquivo');
             $table->timestamps();

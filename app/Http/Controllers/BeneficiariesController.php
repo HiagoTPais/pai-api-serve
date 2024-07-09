@@ -39,6 +39,30 @@ class BeneficiariesController extends Controller
         return $beneficiarios;
     }
 
+    public function search(Request $request)
+    {
+        $query = DB::table("beneficiarios as b");
+
+        foreach ($request->all() as $key => $value) {
+            if ($request->input($key)) {
+                $query->where('b.' . $key, 'like', '%' . $value . '%');
+            }
+        }
+
+        $beneficiarios = $query->get();
+
+        $beneficiarios->map(function ($beneficiario) {
+            $beneficiarios_dependentes = DB::table("beneficiarios_dependentes as bd")
+                ->where("bd.beneficiario_id", $beneficiario->id)->get();
+
+            $beneficiario->beneficiarios_dependentes = $beneficiarios_dependentes;
+            
+            return $beneficiario;
+        });
+
+        return $beneficiarios;
+    }
+
     public function getBeneficiary($id)
     {
         $beneficiary = Beneficiaries::where("id", $id)->get();

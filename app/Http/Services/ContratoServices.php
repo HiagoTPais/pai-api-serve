@@ -33,7 +33,7 @@ class ContratoServices
                 if (Str::contains($key, "-" . $i)) {
                     $filter += [strstr($key, '-', true) => $value];
 
-                    Log::info($filter);
+                    // Log::info($filter);
                 }
             }
 
