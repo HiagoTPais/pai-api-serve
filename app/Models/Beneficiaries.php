@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Traits\HasUuid;
+use App\Models\ContractDocument;
 
 class Beneficiaries extends Model
 {
@@ -47,13 +48,18 @@ class Beneficiaries extends Model
         'protocolo_id'
     ];
 
-    // public function contract(): HasMany
-    // {
-    //     return $this->hasMany(Contract::class);
-    // }
+    public function contract(): HasMany
+    {
+        return $this->hasMany(ContractDocument::class);
+    }
 
     public function pagamento(): HasMany
     {
         return $this->hasMany(PagamentoBeneficiario::class);
+    }
+
+    public function dependentes(): HasMany
+    {
+        return $this->hasMany(DependentBeneficiaries::class, 'beneficiario_id', 'id');
     }
 }

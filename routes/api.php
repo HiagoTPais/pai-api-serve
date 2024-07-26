@@ -71,9 +71,12 @@ Route::controller(BeneficiariesController::class)->prefix('beneficiarios')->grou
 });
 
 Route::controller(ServicoFunerarioController::class)->prefix('servico-funerario')->group(function () {
-    Route::post('/store', 'store');
-    Route::post('/store-novo', 'store');
     Route::get('', 'index');
+    Route::post('/store', 'store');
+    Route::post('/store-novo', 'storeNovo');
+    Route::get('/salao', 'getSalao');
+    Route::get('/local-sepultamento', 'getLocalSepultamento');
+    Route::get('/copeira', 'getCopeira');
 });
 
 

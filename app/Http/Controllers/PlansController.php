@@ -20,6 +20,7 @@ class PlansController extends Controller
     {
         $plans = Plans::query()->when(
             $request->input('search'),
+            
             function ($query, $search) {
                 $query->where('nome', 'like', '%' . $search . '%')
                     ->OrWhere('tipo', 'like', '%' . $search . '%');

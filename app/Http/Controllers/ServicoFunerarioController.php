@@ -17,9 +17,14 @@ class ServicoFunerarioController extends Controller
 {
     public function index(Request $request)
     {
-        $servicos = ServicoFunerario::all();
+        $servicos = ServicoFunerario::query()->when(
+            $request->input('search'),
+            function ($query, $search) {
+                $query->where('nome_completo', 'like', '%' . $search . '%');
+            }
+        )->paginate(8);
 
-        return response()->json($servicos, 204);
+        return $servicos;
     }
 
     public function store(Request $request)
@@ -60,7 +65,44 @@ class ServicoFunerarioController extends Controller
         );
     }
 
-    public function storeNovo(Request $request) {
-        Log::info($request->all());
+    public function storeNovo(Request $request)
+    {
+        // Log::info($request->all());
+
+        if ($request->tabela == "Salão de Homenagem") {
+            DB::table("salao_homenagem")->insert([
+                "nome" => $request->item,
+                "created_at" => date('Y-m-d H:i:s'),
+                "updated_at" => date('Y-m-d H:i:s')
+            ]);
+        }
+
+        if ($request->tabela == "Local de Seputamento") {
+            DB::table("local_seputamento")->insert([
+                "nome" => $request->item,
+                "created_at" => date('Y-m-d H:i:s'),
+                "updated_at" => date('Y-m-d H:i:s')
+            ]);
+        }
+    }
+
+    public function getSalao()
+    {
+        $salao = DB::table("salao_homenagem")->get();
+
+        return $salao;
+    }
+
+    public function getCopeira()
+    {
+        $copeira = DB::table("colaborador")->get();
+
+        return $copeira;
+    }
+
+    public function getLocalSepultamento() {
+        $local_seputamento = DB::table("local_seputamento")->get();
+
+        return $local_seputamento;
     }
 }
