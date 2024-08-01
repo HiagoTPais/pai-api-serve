@@ -77,12 +77,8 @@ Route::controller(ServicoFunerarioController::class)->prefix('servico-funerario'
     Route::get('/salao', 'getSalao');
     Route::get('/local-sepultamento', 'getLocalSepultamento');
     Route::get('/copeira', 'getCopeira');
+    Route::get('/search', 'getServico');
 });
-
-
-
-
-
 
 // Route::controller(ColaboradorController::class)->group(function () {
 //     Route::get('colaborador', 'index');

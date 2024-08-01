@@ -3,8 +3,16 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\{HasMany, BelongsTo};
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Traits\HasUuid;
+use App\Models\{
+    CuidadosFunerario,
+    PagamentosFunerario,
+    ProdutosFunerario,
+    Translado,
+    Beneficiaries
+};
 
 class ServicoFunerario extends Model
 {
@@ -51,4 +59,34 @@ class ServicoFunerario extends Model
         'havera_foto_colorida',
         'messagem_para_placa',
     ];
+
+    public function responsavel(): BelongsTo
+    {
+        return $this->BelongsTo(Beneficiaries::class, 'responsavel_beneficiario_id', 'id');
+    }
+
+    public function falecido(): BelongsTo
+    {
+        return $this->BelongsTo(Beneficiaries::class, 'falecido_beneficiario_id', 'id');
+    }
+
+    public function cuidados(): HasMany
+    {
+        return $this->hasMany(CuidadosFunerario::class, 'servico_funerario_id', 'id');
+    }
+
+    public function pagamentos(): HasMany
+    {
+        return $this->hasMany(PagamentosFunerario::class, 'servico_funerario_id', 'id');
+    }
+
+    public function produtos(): HasMany
+    {
+        return $this->hasMany(ProdutosFunerario::class, 'servico_funerario_id', 'id');
+    }
+
+    public function translado(): HasMany
+    {
+        return $this->hasMany(Translado::class, 'servico_funerario_id', 'id');
+    }
 }

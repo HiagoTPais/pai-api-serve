@@ -17,7 +17,6 @@ class Translado extends Model
     public $incrementing = false;
 
     protected $fillable = [
-
         'servico_funerario_id',
         'havera_translado',
         'cep_partida',

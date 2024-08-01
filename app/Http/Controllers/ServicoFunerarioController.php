@@ -10,6 +10,7 @@ use App\Models\{
     PagamentosFunerario,
     ProdutosFunerario,
     ServicoFunerario,
+    Beneficiaries,
     Translado
 };
 
@@ -100,9 +101,31 @@ class ServicoFunerarioController extends Controller
         return $copeira;
     }
 
-    public function getLocalSepultamento() {
+    public function getLocalSepultamento()
+    {
         $local_seputamento = DB::table("local_seputamento")->get();
 
         return $local_seputamento;
+    }
+
+    public function getServico(Request $request)
+    {
+        $beneficiario = Beneficiaries::where('nome_completo', 'like', '%' . $request->input('nome_completo') . '%')
+            ->OrWhere('cpf', 'like', '%' . $request->input('cpf') . '%')->first();
+
+        // $servico_funerario = ServicoFunerario::where('falecido_beneficiario_id', $beneficiario->id)->first();
+
+        $servico_funerario =  DB::table("servico_funerario as sf")
+        ->select(
+            "b.nome_completo as responsavel",
+            "sf.falecido_beneficiario_id as felecido",
+            "sf.local as local",
+            "sf.jazigo as jazigo",
+            "sf.data_hora_sepultamento as data_hora_sepultamento"
+        )
+        ->join('beneficiarios as b', 'b.id', '=', 'sf.responsavel_beneficiario_id')
+        ->where('sf.falecido_beneficiario_id', $beneficiario->id)->get();
+
+        return $servico_funerario;
     }
 }
