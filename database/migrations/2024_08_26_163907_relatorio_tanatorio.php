@@ -11,14 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('materiais', function (Blueprint $table) {
+        Schema::create('relatorio_tanatorio', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('tanatorio_id')->nullable(true);
-            $table->uuid('servico_funerario_id')->nullable(true);
-            $table->integer('quantidade')->nullable(true);
-            $table->decimal('valor')->nullable(true);
-            $table->string('produto')->nullable(true);
+            $table->uuid('tanatorio_id')->nullable(false);
+            $table->string('arquivo');
             $table->timestamps();
+        });
+
+        Schema::table('relatorio_tanatorio', function (Blueprint $table) {
+            $table->foreign('tanatorio_id')->references('id')->on('tanatorio')->onDelete('cascade');
         });
     }
 
@@ -27,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('materiais');
+        //
     }
 };

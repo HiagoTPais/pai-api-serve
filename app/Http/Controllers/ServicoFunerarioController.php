@@ -18,58 +18,52 @@ class ServicoFunerarioController extends Controller
 {
     public function index(Request $request)
     {
-        $servicos = ServicoFunerario::query()->when(
-            $request->input('search'),
-            function ($query, $search) {
-                $query->where('nome_completo', 'like', '%' . $search . '%');
-            }
-        )->paginate(8);
+        $servicos =  DB::table("servico_funerario as sf")
+            ->select(
+                "b.nome_completo as responsavel",
+                "sf.nome_falecido as felecido",
+                "sf.peso as peso",
+                "sf.altura as altura",
+                "sf.local as local",
+                "sf.jazigo as jazigo",
+                "sf.data_hora_sepultamento as data_hora_sepultamento",
+                "sf.hora_data_inicio as data_hora_obito",
+                "sf.hora_data_termino as data_hora_atendimeto"
+            )
+            ->leftJoin('beneficiarios as b', 'b.id', '=', 'sf.responsavel_beneficiario_id')->get();
 
         return $servicos;
     }
 
     public function store(Request $request)
     {
-        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-
         $request = $request->all()['dataForm'];
 
-        $cuidadosFunerario = $request[4];
-        $pagamentosFunerario = $request[6];
         $produtosFunerario = $request[3];
         $transladoInfo = $request[2];
-        $servicoFunerario = array_merge($request[1], $request[5], $request[7]);
+
+        $servicoFunerario = array_merge(
+            $request[1],
+            $request[4],
+            $request[5],
+            $request[6],
+            $request[7]
+        );
 
         $servico_funerario = ServicoFunerario::create($servicoFunerario);
 
-        $cuidadosFunerario['servico_funerario_id'] = $servico_funerario->id;
-        $pagamentosFunerario['servico_funerario_id'] = $servico_funerario->id;
         $produtosFunerario['servico_funerario_id'] = $servico_funerario->id;
         $transladoInfo['servico_funerario_id'] = $servico_funerario->id;
 
-        $cuidados_funerario = CuidadosFunerario::create($cuidadosFunerario);
+        // $produtos_funerario = ProdutosFunerario::create($produtosFunerario);
 
-        $pagamentos_funerario = PagamentosFunerario::create($pagamentosFunerario);
+        // $translado = Translado::create($transladoInfo);
 
-        $produtos_funerario = ProdutosFunerario::create($produtosFunerario);
-
-        $translado = Translado::create($transladoInfo);
-
-        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
-
-        return array_merge(
-            $servico_funerario,
-            $cuidados_funerario,
-            $pagamentos_funerario,
-            $produtos_funerario,
-            $translado
-        );
+        return $servico_funerario;
     }
 
     public function storeNovo(Request $request)
     {
-        // Log::info($request->all());
-
         if ($request->tabela == "Salão de Homenagem") {
             DB::table("salao_homenagem")->insert([
                 "nome" => $request->item,
@@ -116,15 +110,22 @@ class ServicoFunerarioController extends Controller
         // $servico_funerario = ServicoFunerario::where('falecido_beneficiario_id', $beneficiario->id)->first();
 
         $servico_funerario =  DB::table("servico_funerario as sf")
-        ->select(
-            "b.nome_completo as responsavel",
-            "sf.falecido_beneficiario_id as felecido",
-            "sf.local as local",
-            "sf.jazigo as jazigo",
-            "sf.data_hora_sepultamento as data_hora_sepultamento"
-        )
-        ->join('beneficiarios as b', 'b.id', '=', 'sf.responsavel_beneficiario_id')
-        ->where('sf.falecido_beneficiario_id', $beneficiario->id)->get();
+            ->select(
+                "b.nome_completo as responsavel",
+                "sf.nome_falecido as felecido",
+                "sf.local as local",
+                "sf.jazigo as jazigo",
+                "sf.data_hora_sepultamento as data_hora_sepultamento"
+            )
+            ->join('beneficiarios as b', 'b.id', '=', 'sf.responsavel_beneficiario_id')
+            ->where('sf.falecido_beneficiario_id', $beneficiario->id)->get();
+
+        return $servico_funerario;
+    }
+
+    public function getServicoFunerario(Request $request)
+    {
+        $servico_funerario = ServicoFunerario::where('id', $request->id)->first();
 
         return $servico_funerario;
     }

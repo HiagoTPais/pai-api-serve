@@ -12,7 +12,8 @@ use App\Http\Controllers\{
     ContratoColaboradorController,
     PagamentoBeneficiarioController,
     ContratoBeneficiarioController,
-    ServicoFunerarioController
+    ServicoFunerarioController,
+    TanatorioController
 };
 
 /*
@@ -74,10 +75,23 @@ Route::controller(ServicoFunerarioController::class)->prefix('servico-funerario'
     Route::get('', 'index');
     Route::post('/store', 'store');
     Route::post('/store-novo', 'storeNovo');
+    Route::get('/get/{id}', 'getServicoFunerario');
     Route::get('/salao', 'getSalao');
     Route::get('/local-sepultamento', 'getLocalSepultamento');
     Route::get('/copeira', 'getCopeira');
     Route::get('/search', 'getServico');
+});
+
+
+Route::controller(TanatorioController::class)->prefix('tanatorio')->group(function () {
+    Route::get('', 'index');
+    Route::get('/get/{id}', 'getTanatorio');
+    Route::post('/store', 'store');
+    Route::put('/update/{id}', 'update');
+    Route::get('/download/{id}', 'download');
+    Route::get('/get-outros-locais/{id}', 'getOutrosLocais');
+    Route::get('/get-materias/{id}', 'getMaterias');
+    Route::get('/info', 'getTanatorioInfo');
 });
 
 // Route::controller(ColaboradorController::class)->group(function () {

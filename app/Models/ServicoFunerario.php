@@ -26,7 +26,7 @@ class ServicoFunerario extends Model
 
     protected $fillable = [
         'responsavel_beneficiario_id',
-        'falecido_beneficiario_id',
+        'nome_falecido',
         'havera_uso_salao_homenagem',
         'havera_assistencia_copa',
         'havera_homenagem',
@@ -58,35 +58,28 @@ class ServicoFunerario extends Model
         'deseja_placa_identificacao_tumular',
         'havera_foto_colorida',
         'messagem_para_placa',
+        'causa_morte',
+        'peso',
+        'altura',
+        'agenda_funeraria',
+        'auxiliar_agencia_funeraria',
+        'hora_data_inicio',
+        'hora_data_termino',
+        'ocupacao',
+        'religiao',
+        'havera_somatoconservacao_avancada',
+        'corpo_necropsiado',
+        'observacao',
+        'parcelamento',
+        'forma_pagamento',
+        'bandeira_cartao',
+        'n_parcelas',
+        'valor_parcelas',
+        'valor_total',
     ];
 
     public function responsavel(): BelongsTo
     {
         return $this->BelongsTo(Beneficiaries::class, 'responsavel_beneficiario_id', 'id');
-    }
-
-    public function falecido(): BelongsTo
-    {
-        return $this->BelongsTo(Beneficiaries::class, 'falecido_beneficiario_id', 'id');
-    }
-
-    public function cuidados(): HasMany
-    {
-        return $this->hasMany(CuidadosFunerario::class, 'servico_funerario_id', 'id');
-    }
-
-    public function pagamentos(): HasMany
-    {
-        return $this->hasMany(PagamentosFunerario::class, 'servico_funerario_id', 'id');
-    }
-
-    public function produtos(): HasMany
-    {
-        return $this->hasMany(ProdutosFunerario::class, 'servico_funerario_id', 'id');
-    }
-
-    public function translado(): HasMany
-    {
-        return $this->hasMany(Translado::class, 'servico_funerario_id', 'id');
     }
 }

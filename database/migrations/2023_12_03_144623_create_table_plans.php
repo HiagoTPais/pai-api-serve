@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('nome')->nullable();
             $table->string('tipo')->nullable();
             $table->string('taxa_adesao')->nullable();
-            $table->string('valor_plano_mes')->nullable();
+            $table->decimal('valor_plano_mes')->nullable();
             $table->string('duracao_contrato')->nullable();
             $table->string('taxa_rescisao')->nullable();
             $table->integer('n_min')->nullable();
